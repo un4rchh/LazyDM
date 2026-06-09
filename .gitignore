@@ -1,0 +1,6 @@
+.o
+lazydm
+lazydm-*.tar.gz
+config.h
+.DS_Store
+*~
