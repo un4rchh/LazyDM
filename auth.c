@@ -64,7 +64,7 @@ cleanup:
   }
   
   if (err_msg != NULL){
-    if (*pamh != NULL){
+    if (pamh != NULL && *pamh != NULL){
       pam_end(*pamh, pam_ret);
       *pamh = NULL;
     }

@@ -39,7 +39,10 @@ void load_session(Session *sessions, int *count, const char *dirpath, int is_way
       }
       sessions[*count] = s;
       (*count)++;
-      if (*count >= MAX_SES) { break; }
+      if (*count >= MAX_SES) {
+        fclose(fp);
+        break;
+      }
       fclose(fp);
     }
   }

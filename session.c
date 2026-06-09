@@ -65,7 +65,6 @@ bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, i
     char us[BUF_SIZE];
     snprintf(us, sizeof(us), "Error: %.230s not found", lz->login);
     draw_err(lz->fd, by, bh, bx, bw, us);
-    free(sessions);
     return false;
   }
   s->pw = malloc(sizeof(struct passwd));

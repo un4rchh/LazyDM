@@ -269,7 +269,7 @@ bool ses_init(Config *lz, Session *sessions, int *xcount, int *wcount, int bx, i
 
       if (total > 0 && (*num < 0 || *num >= total)){
         draw_err(lz->fd, by, bh, bx, bw, "Error: bad session number");
-        free(sessions);
+        //free(sessions);
         return false;
       }
 #endif
