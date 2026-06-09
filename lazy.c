@@ -81,8 +81,8 @@ bool init_tty(Config *lz){
 
 void draw_ui(int fd, int bw, int bh, int *bx, int *by, int *term_x, int *term_y){
   term_clear(fd);
-  term_fill_bg(fd, bg_color);
-  term_fg_color(fd, fg_color); 
+  term_fill_bg(fd, bg);
+  term_fg_color(fd, fg); 
   compute_layout(fd, bw, bh, bx, by, term_x, term_y);
 #if MOTD_SH == 0  
   draw_motd(fd, motd_path, *by, *bx, bw);
