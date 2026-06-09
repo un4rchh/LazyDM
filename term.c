@@ -68,25 +68,20 @@ void term_reset(int fd){
 }
 
 void term_box(int fd, int x, int y, int w, int h){
-  term_goto(fd, y, x);
-  write(fd, "╔", 3);
-  for (int i = 0; i < w - 2; i++){
-    write(fd, "═", 3);
-  }
-  write(fd, "╗", 3);
-
-  for (int i = 1; i < h - 1; i++){
-    term_goto(fd, y+i, x);
-    write(fd, "║", 3);
-    term_goto(fd, y + i, x + w - 1);
-    write(fd, "║", 3);
-  }
-
+    term_goto(fd, y, x);
+    write(fd, "┏", 3);
+    for (int i = 0; i < w - 2; i++) write(fd, "━", 3);
+    write(fd, "┓", 3);
+    for (int i = 1; i < h - 1; i++){
+        term_goto(fd, y + i, x);
+        write(fd, "┃", 3);
+        term_goto(fd, y + i, x + w - 1);
+        write(fd, "┃", 3);
+    }
     term_goto(fd, y + h - 1, x);
-    write(fd, "╚", 3);
-    for (int i = 0; i < w - 2; i++)
-        write(fd, "═", 3);
-    write(fd, "╝", 3);
+    write(fd, "┗", 3);
+    for (int i = 0; i < w - 2; i++) write(fd, "━", 3);
+    write(fd, "┛", 3);
 }
 
 void draw_err(int fd, int by, int bh, int bx, int bw, const char *msg){
