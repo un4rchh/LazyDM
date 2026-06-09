@@ -81,7 +81,7 @@ static const int bg_color = 40;        // Background fill color
 #define pam_service "login" // The PAM service name to use for authentication
 
 // Default values for Autologin and UI
-#define default_user "kuwo"       // Default username (used if AUTOLOGIN is 0, or pre-filled)
+#define default_user "user"       // Default username (used if AUTOLOGIN is 0, or pre-filled)
 #define default_session "vxwm"    // Default session name to auto-select (must match the 'Name=' in .desktop)
 
 // MOTD Script
