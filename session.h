@@ -13,6 +13,6 @@ typedef struct {
 } Start;
 
 int start_session(Start *s);
-bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, int bx, int bh, int bw, int *xcount, int *wcount);
+bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, int bx, int bh, int bw, const int *xcount, const int *wcount);
 
 #endif

@@ -57,10 +57,10 @@ int start_session(Start *s){
   _exit(1);
 }
 
-bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, int bx, int bh, int bw, int *xcount, int *wcount){
+bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, int bx, int bh, int bw, const int *xcount, const int *wcount){
   s->pamh = lz->pamh;
 
-  struct passwd *tmp_pw = getpwnam(lz->login);
+  const struct passwd *tmp_pw = getpwnam(lz->login);
   if (!tmp_pw) {
     char us[BUF_SIZE];
     snprintf(us, sizeof(us), "Error: %.230s not found", lz->login);
@@ -81,7 +81,7 @@ bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, i
 
     if (num < *xcount) {
 
-      char *abs_exec = get_abs_path(sessions[num].exec);
+      const char *abs_exec = get_abs_path(sessions[num].exec);
       char full_cmd[PATH_MAX];
 #if XINIT_USE == 0
       snprintf(full_cmd, sizeof(full_cmd), "startx %s/.xinitrc -- :%d vt%d", s->pw->pw_dir, display_number, tty_number);
@@ -89,9 +89,9 @@ bool prepare_session(Config *lz, Start *s, Session *sessions, int num, int by, i
       snprintf(full_cmd, sizeof(full_cmd), "exec /usr/bin/xinit %s -- /usr/bin/Xorg :%d vt%d", abs_exec, display_number, tty_number);
 #endif
       s->cmd = strdup(full_cmd);
-      free(abs_exec);
+      free((char *)abs_exec);
     } else {
-        char *abs_exec = get_abs_path(sessions[num].exec);
+        const char *abs_exec = get_abs_path(sessions[num].exec);
         s->cmd = abs_exec;
       }
     } 

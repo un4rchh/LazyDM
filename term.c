@@ -9,6 +9,8 @@
 
 #define FILL_SIZE   1024
 
+static void term_bg_color(int fd, int bg);
+
 void term_clear(int fd){
   write(fd, "\033[2J\033[H", 7);
 }
@@ -19,21 +21,21 @@ void term_goto(int fd, int y, int x){
   write(fd, buf, strlen(buf));
 }
 
-void term_fg_color(int fd, int fg_color){
-  if (!((fg_color >= 30 && fg_color <= 37) || (fg_color >= 90 && fg_color <= 97))) {
+void term_fg_color(int fd, int fg){
+  if (!((fg >= 30 && fg <= 37) || (fg >= 90 && fg <= 97))) {
         return;
     }
     char buf[BUF_SIZE];
-    snprintf(buf, sizeof(buf), "\033[%dm", fg_color);
+    snprintf(buf, sizeof(buf), "\033[%dm", fg);
     write(fd, buf, strlen(buf));
 }
 
-void term_bg_color(int fd, int bg_color) {
-    if (!((bg_color >= 40 && bg_color <= 47) || (bg_color >= 100 && bg_color <= 107))) {
+void term_bg_color(int fd, int bg) {
+    if (!((bg >= 40 && bg <= 47) || (bg >= 100 && bg <= 107))) {
         return;
     }
     char buf[BUF_SIZE];
-    snprintf(buf, sizeof(buf), "\033[%dm", bg_color); 
+    snprintf(buf, sizeof(buf), "\033[%dm", bg); 
     write(fd, buf, strlen(buf));
 }
 
@@ -85,13 +87,6 @@ void term_box(int fd, int x, int y, int w, int h){
     for (int i = 0; i < w - 2; i++)
         write(fd, "═", 3);
     write(fd, "╝", 3);
-}
-
-void term_center(int fd, int w, int y, char *str){
-  size_t len = strlen(str);
-  int x = (w - len)/2;
-  term_goto(fd, y, x);
-  write(fd, str, len);
 }
 
 void draw_err(int fd, int by, int bh, int bx, int bw, const char *msg){

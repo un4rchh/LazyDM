@@ -85,7 +85,7 @@ int talk_conv(int num_msg, const struct pam_message **msg,
     return PAM_CONV_ERR;
   }
 
-  auth_conv_data *ad = (auth_conv_data *)appdata;
+  const auth_conv_data *ad = (auth_conv_data *)appdata;
 
   for (int i = 0; i < num_msg; i++){
 

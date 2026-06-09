@@ -51,7 +51,7 @@ void signal_handler(int sig){
 
 bool init_tty(Config *lz){
   if (isatty(STDIN_FILENO)){
-    char *curr = ttyname(STDIN_FILENO);
+    const char *curr = ttyname(STDIN_FILENO);
     if (curr){
       snprintf(lz->tty_path, sizeof(lz->tty_path), "%s", curr);
     } else {
@@ -245,9 +245,9 @@ bool ses_init(Config *lz, Session *sessions, int *xcount, int *wcount, int bx, i
       int total = *xcount + *wcount;
       
       write(lz->fd, "\033[?25l", 6);
-
-      char count[16];
+ 
       if (total != 0){
+        char count[16];
         ssize_t sn = read(lz->fd, count, sizeof(count)-1);
         if (sn <= 0){
           term_reset(lz->fd);
@@ -356,6 +356,9 @@ void clean(Start *s, Session *sessions){
 int main() {
 
   Config *lz = (Config *)calloc(1, sizeof(Config));
+  if (!lz){
+    return 1;
+  }
 
   if (!init_tty(lz)) { return 1; }
 
@@ -382,6 +385,10 @@ int main() {
     }
 
     Start *s = calloc(1, sizeof(Start));
+    if (!s){
+      clean(NULL, sessions);
+      return 1;
+    }
     if (!prepare_session(lz, s, sessions, num, by, bx, bh, bw, &xcount, &wcount)) {
       clean(s, sessions);
       continue;
