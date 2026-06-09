@@ -50,10 +50,18 @@ void signal_handler(int sig){
 }
 
 bool init_tty(Config *lz){
-  snprintf(lz->tty_path, sizeof(lz->tty_path), "/dev/tty%d", tty_number);
-  lz->fd = open(lz->tty_path, O_RDWR);
-  if (lz->fd < 0){ return false; }
-
+  if (isatty(STDIN_FILENO)){
+    char *curr = ttyname(STDIN_FILENO);
+    if (curr){
+      snprintf(lz->tty_path, sizeof(lz->tty_path), "%s", curr);
+    } else {
+      snprintf(lz->tty_path, sizeof(lz->tty_path), "/dev/tty");
+    }
+  } else {
+    snprintf(lz->tty_path, sizeof(lz->tty_path), "/dev/tty%d", tty_number);
+    }
+    lz->fd = open(lz->tty_path, O_RDWR);  
+    if (lz->fd < 0){ return false; }
 
   struct sigaction sa;
   sa.sa_handler = signal_handler;
