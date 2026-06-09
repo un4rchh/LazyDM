@@ -110,8 +110,8 @@ static const int display_number = 0;   // X11 display number (usually :0 for the
 static const int tty_number = 7;       // The TTY number where LazyDM will run (e.g., /dev/tty5)
 
 // Terminal UI Colors (ANSI 256-color codes)
-static const int fg_color = 47;        // Foreground text color
-static const int bg_color = 40;        // Background fill color
+static const int fg_color = FG_WHITE;        // Foreground text color
+static const int bg_color = BG_BLACK;        // Background fill color
 
 // Session directories (Standard XDG paths for Display Managers)
 #define xdirpath "/usr/share/xsessions"       // Directory for X11 .desktop files
