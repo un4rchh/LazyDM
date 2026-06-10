@@ -10,7 +10,6 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <ctype.h>
-#include <strings.h>
 
 #include "utils.h"
 #include "term.h"
