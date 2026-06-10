@@ -8,7 +8,6 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <sys/ioctl.h>
-#include <linux/kd.h>
 #include <errno.h>
 #include <ctype.h>
 #include <strings.h>
@@ -310,8 +309,6 @@ bool launch_session(Config *lz, Session *sessions, Start *s, pid_t pid, int by, 
           draw_err(lz->fd, by, bh, bx, bw, "Error: session crashed");
           sleep(SLEEP_TIME);
       }
-
-      ioctl(lz->fd, KDSKBMODE, K_XLATE);
 
       close(lz->fd);
       lz->fd = open(lz->tty_path, O_RDWR);
