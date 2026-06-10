@@ -1,8 +1,10 @@
+#define _DEFAULT_SOURCE
+
+#include <grp.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <grp.h>
 #include <pwd.h>
 #include <security/pam_appl.h>
 #include <sys/ioctl.h>
@@ -38,7 +40,10 @@ int start_session(Start *s){
 
   char tty[32];
   snprintf(tty, sizeof(tty), "/dev/tty%d", tty_number);
-  chown(tty, s->pw->pw_uid, s->pw->pw_gid);
+  if (chown(tty, s->pw->pw_uid, s->pw->pw_gid) == -1){
+    perror("chown tty error");
+    return 1;
+  }
 
   ioctl(0, KDSKBMODE, K_UNICODE);
 
@@ -46,7 +51,10 @@ int start_session(Start *s){
   if (setgid(s->pw->pw_gid) == -1){ return 1; }
   if (setuid(s->pw->pw_uid) == -1){ return 1; }
   
-  chdir(s->pw->pw_dir); 
+  if (chdir(s->pw->pw_dir) == -1){
+    perror("chdir to home directory failed");
+    return 1;
+  }
 
   char *args[] = { "/bin/sh", "-c", (char*)s->cmd, NULL };   
 

@@ -74,6 +74,6 @@ void draw_motd(int fd, const char *path, int box_y, int box_x, int box_w){
     if (len == 0) continue;
 
     term_goto(fd, start_y + i, motd_x);
-    write(fd, lines[i], strlen(lines[i]));
+    WRITE(fd, lines[i], strlen(lines[i]));
   }
 }

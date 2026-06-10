@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <strings.h>
 
 #include "utils.h"
 #include "term.h"
@@ -91,7 +92,7 @@ void draw_ui(int fd, int bw, int bh, int *bx, int *by, int *term_x, int *term_y)
   int len = strlen("LazyDM");
   int x = *bx + (bw - len) / 2;
   term_goto(fd, *by, x);
-  write(fd, "LazyDM", len); 
+  WRITE(fd, "LazyDM", len); 
 }
 
 bool get_user_input(Config *lz, int bx, int by){
@@ -103,7 +104,7 @@ bool get_user_input(Config *lz, int bx, int by){
       snprintf(login, sizeof(login), "%.200s login: %.30s",hostname, default_user);
     }
     term_goto(lz->fd, by + 5, bx + 2);
-    write(lz->fd, login, strlen(login));
+    WRITE(lz->fd, login, strlen(login));
     strncpy(lz->login, default_user, BUF_SIZE-1);
     lz->login[BUF_SIZE-1] = '\0';
 #else
@@ -113,7 +114,7 @@ bool get_user_input(Config *lz, int bx, int by){
       snprintf(login, sizeof(login), "%.240s login: ", hostname);
     }
     term_goto(lz->fd, by + 5, bx + 2);
-    write(lz->fd, login, strlen(login));
+    WRITE(lz->fd, login, strlen(login));
 
     struct termios current_term = lz->old_term;
     current_term.c_lflag |= (ICANON | ECHO | ICRNL | ISIG);
@@ -161,7 +162,7 @@ bool get_user_input(Config *lz, int bx, int by){
   }
 
   term_goto(lz->fd, by + 7, bx + 2);
-  write(lz->fd, "Password: ", 10);
+  WRITE(lz->fd, "Password: ", 10);
 
   ssize_t ps = read(lz->fd, lz->passwd, BUF_SIZE - 1);
   if (ps <= 0){
@@ -206,11 +207,11 @@ bool ses_init(Config *lz, Session *sessions, int *xcount, int *wcount, int bx, i
   load_session(sessions + *xcount, wcount, wdirpath, 1);
 
 #if AUTOLOGIN_SESSION == 0
-    write(lz->fd, "\033[?25l", 6);
+    WRITE(lz->fd, "\033[?25l", 6);
     char sess[BUF_SIZE];
     snprintf(sess, sizeof(sess), "Select: %s", default_session);
     term_goto(lz->fd, by + 10, bx + 2);
-    write(lz->fd, sess, strlen(sess));
+    WRITE(lz->fd, sess, strlen(sess));
     for (int i = 0; i < *xcount + *wcount; i++){
       if (strcasecmp(sessions[i].name, default_session) == 0){
         *num = i;
@@ -218,16 +219,16 @@ bool ses_init(Config *lz, Session *sessions, int *xcount, int *wcount, int bx, i
       }
     }
 #elif XINIT_USE == 0 && AUTOLOGIN_SESSION != 0
-    write(lz->fd, "\033[?25l", 6);
+    WRITE(lz->fd, "\033[?25l", 6);
     term_goto(lz->fd, by + 10, bx + 2);
-    write(lz->fd, "Auto-start: xinitrc", strlen("Auto-start: xinitrc"));
+    WRITE(lz->fd, "Auto-start: xinitrc", strlen("Auto-start: xinitrc"));
     *num = 0;
 #else 
       term_goto(lz->fd, by + 10, bx + 2);
       for (int i = 0; i < *xcount + *wcount; i++){
         char ses[BUF_SIZE];
         snprintf(ses, sizeof(ses), "%s[%d]  ", sessions[i].name, i);
-        write(lz->fd, ses, strlen(ses));
+        WRITE(lz->fd, ses, strlen(ses));
       }
 
       struct termios input_session = lz->old_term;
@@ -243,7 +244,7 @@ bool ses_init(Config *lz, Session *sessions, int *xcount, int *wcount, int bx, i
 
       int total = *xcount + *wcount;
       
-      write(lz->fd, "\033[?25l", 6);
+      WRITE(lz->fd, "\033[?25l", 6);
  
       if (total != 0){
         char count[16];
